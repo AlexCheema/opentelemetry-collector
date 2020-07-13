@@ -8,11 +8,15 @@ receivers:
 
 
 exporters:
-  opencensus:
-    endpoint: "otel-collector:55678"
-    insecure: true
+  awsxray:
+    region: us-east-1
+
   logging:
     loglevel: debug
+
+#  opencensus:
+#    endpoint: "otel-collector:55678"
+#    insecure: true
 
 processors:
   batch:
@@ -31,8 +35,10 @@ service:
     traces:
       receivers: [opencensus, jaeger, zipkin]
       processors: [batch, queued_retry]
-      exporters: [opencensus, logging]
+#      exporters: [opencensus, logging, awsxray]
+      exporters: [awsxray]
     metrics:
       receivers: [opencensus]
       processors: [batch]
-      exporters: [logging,opencensus]
+      exporters: [logging]
+#      exporters: [logging,opencensus]
